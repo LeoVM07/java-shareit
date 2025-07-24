@@ -5,6 +5,8 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemBookedDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
@@ -19,19 +21,19 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ResponseEntity<ItemDto> addItem(@RequestHeader("X-Sharer-User-Id") long ownerId,
-                                           @RequestBody @Valid ItemDto itemDto) {
-        return new ResponseEntity<>(itemService.addItem(ownerId, itemDto), HttpStatus.OK);
+    public ResponseEntity<ItemDto> createItem(@RequestHeader("X-Sharer-User-Id") long ownerId,
+                                              @RequestBody @Valid ItemDto itemDto) {
+        return new ResponseEntity<>(itemService.createItem(ownerId, itemDto), HttpStatus.OK);
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> showItemById(@PathVariable("itemId") long itemId) {
-        return new ResponseEntity<>(itemService.showItemById(itemId), HttpStatus.OK);
+    public ResponseEntity<ItemBookedDto> getItemById(@PathVariable("itemId") long itemId) {
+        return new ResponseEntity<>(itemService.getItemById(itemId), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemDto>> showAllItemsByUserId(@RequestHeader("X-Sharer-User-Id") long ownerId) {
-        return new ResponseEntity<>(itemService.showAllItemsByUserId(ownerId), HttpStatus.OK);
+    public ResponseEntity<List<ItemBookedDto>> getAllItemsByUserId(@RequestHeader("X-Sharer-User-Id") long ownerId) {
+        return new ResponseEntity<>(itemService.getAllItemsByUserId(ownerId), HttpStatus.OK);
     }
 
     @PatchMapping("/{itemId}")
@@ -44,6 +46,13 @@ public class ItemController {
     @GetMapping("/search")
     public ResponseEntity<List<ItemDto>> searchItems(@RequestParam String text) {
         return new ResponseEntity<>(itemService.searchItems(text), HttpStatus.OK);
+    }
+
+    @PostMapping("{itemId}/comment")
+    public ResponseEntity<CommentDto> createComment(@RequestHeader("X-Sharer-User-Id") long authorId,
+                                                    @PathVariable("itemId") long itemId,
+                                                    @RequestBody CommentDto comment) {
+        return new ResponseEntity<>(itemService.createComment(authorId, itemId, comment), HttpStatus.OK);
     }
 }
 

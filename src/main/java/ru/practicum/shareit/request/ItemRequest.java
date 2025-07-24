@@ -9,12 +9,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class ItemRequest {
-    private long id;
-
     @NotBlank(message = "Необходимо оставить описание запрашиваемой вещи")
     @Size(max = 200, message = "Описание не должно быть длиннее 200 символов")
     private final String description;
-
     private final User requestor;
     private final LocalDateTime created;
+    private long id;
 }

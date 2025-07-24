@@ -7,10 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -20,19 +18,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> showAllUsers() {
-        return new ResponseEntity<>(userService.showAllUsers(), HttpStatus.OK);
-    }
-
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto user) {
-        return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> showUser(@PathVariable("userId") long userId) {
-        return new ResponseEntity<>(userService.showUser(userId), HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") long userId) {
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}")
