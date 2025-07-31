@@ -32,6 +32,34 @@ public class ErrorHandler {
         return new ErrorResponse("Ошибка в id вещи", e.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleItemAvailabilityException(final ItemAvailabilityException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse("Ошибка в доступности вещи", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleDuplicateIdException(final DuplicateIdException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse("Ошибка двойного ввода данных", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleBookingIdException(final BookingIdException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse("Ошибка в id бронирования", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(final ValidationException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse("Ошибка валидации данных", e.getMessage());
+    }
+
     @Getter
     public static class ErrorResponse {
         private final String error;

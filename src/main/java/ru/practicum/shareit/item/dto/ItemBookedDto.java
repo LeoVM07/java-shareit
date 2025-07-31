@@ -4,9 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import ru.practicum.shareit.booking.dto.BookingInfoDto;
+
+import java.util.List;
 
 @Data
-public class ItemDto {
+public class ItemBookedDto {
 
     @NotBlank(message = "Необходимо указать название вещи")
     private final String name;
@@ -17,5 +20,11 @@ public class ItemDto {
     private final Boolean available;
     private long id;
     private long ownerId;
+
+    private BookingInfoDto lastBooking;
+
+    private BookingInfoDto nextBooking;
+
+    private List<CommentDto> comments;
 
 }
