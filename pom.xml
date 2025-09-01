@@ -73,12 +73,6 @@
                     <dependencies>
 
                         <dependency>
-                            <groupId>org.jacoco</groupId>
-                            <artifactId>jacoco</artifactId>
-                            <version>0.8.13</version>
-                        </dependency>
-
-                        <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
                             <version>10.3</version>
