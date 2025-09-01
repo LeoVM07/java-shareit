@@ -53,8 +53,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
         userRepository.findById(userId).orElseThrow(() -> new UserIdException(userId));
 
-        ItemRequest request = requestRepository.findById(requestId).
-                orElseThrow(() -> new RequestIdException(requestId));
+        ItemRequest request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new RequestIdException(requestId));
 
         return ItemRequestMapper.toItemRequestDto(request);
 
