@@ -97,11 +97,10 @@
                 <plugins>
                     <plugin>
                         <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco</artifactId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
 </project>
