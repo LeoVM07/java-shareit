@@ -29,11 +29,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.constant.UserHeaderConstant.X_SHARER_USER_ID;
+
 
 @WebMvcTest(BookingController.class)
 class BookingControllerTest {
 
-    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -72,7 +73,7 @@ class BookingControllerTest {
                 .thenReturn(responseDto);
 
         mockMvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, 2L)
+                        .header(X_SHARER_USER_ID, 2L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
@@ -94,7 +95,7 @@ class BookingControllerTest {
                 .thenThrow(new UserIdException(999L));
 
         mockMvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, 999L)
+                        .header(X_SHARER_USER_ID, 999L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isNotFound());
@@ -121,7 +122,7 @@ class BookingControllerTest {
                 .thenReturn(responseDto);
 
         mockMvc.perform(patch("/bookings/1")
-                        .header(USER_ID_HEADER, 1L)
+                        .header(X_SHARER_USER_ID, 1L)
                         .param("approved", "true"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -149,7 +150,7 @@ class BookingControllerTest {
                 .thenReturn(responseDto);
 
         mockMvc.perform(patch("/bookings/1")
-                        .header(USER_ID_HEADER, 1L)
+                        .header(X_SHARER_USER_ID, 1L)
                         .param("approved", "false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -163,7 +164,7 @@ class BookingControllerTest {
                 .thenThrow(new BookingIdException(999L));
 
         mockMvc.perform(patch("/bookings/999")
-                        .header(USER_ID_HEADER, 1L)
+                        .header(X_SHARER_USER_ID, 1L)
                         .param("approved", "true"))
                 .andExpect(status().isNotFound());
     }
@@ -191,7 +192,7 @@ class BookingControllerTest {
                 .thenReturn(responseDto);
 
         mockMvc.perform(get("/bookings/1")
-                        .header(USER_ID_HEADER, 2L))
+                        .header(X_SHARER_USER_ID, 2L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.status", is("WAITING")))
@@ -228,7 +229,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mockMvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, 2L)
+                        .header(X_SHARER_USER_ID, 2L)
                         .param("state", "ALL"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -245,7 +246,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mockMvc.perform(get("/bookings")
-                        .header(USER_ID_HEADER, 2L))
+                        .header(X_SHARER_USER_ID, 2L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -273,7 +274,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mockMvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, 1L)
+                        .header(X_SHARER_USER_ID, 1L)
                         .param("state", "ALL"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -289,7 +290,7 @@ class BookingControllerTest {
                 .thenReturn(bookings);
 
         mockMvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, 1L))
+                        .header(X_SHARER_USER_ID, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -301,7 +302,7 @@ class BookingControllerTest {
                 .thenThrow(new UserIdException(999L));
 
         mockMvc.perform(get("/bookings/owner")
-                        .header(USER_ID_HEADER, 999L)
+                        .header(X_SHARER_USER_ID, 999L)
                         .param("state", "ALL"))
                 .andExpect(status().isNotFound());
     }
@@ -324,7 +325,7 @@ class BookingControllerTest {
     void createBooking_WhenInvalidJson_ShouldReturnBadRequest() throws Exception {
 
         mockMvc.perform(post("/bookings")
-                        .header(USER_ID_HEADER, 2L)
+                        .header(X_SHARER_USER_ID, 2L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{invalid json}"))
                 .andExpect(status().isBadRequest());

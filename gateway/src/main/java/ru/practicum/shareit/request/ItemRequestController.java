@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.BlankItemRequestDto;
 
+import static ru.practicum.shareit.constant.UserHeaderConstant.X_SHARER_USER_ID;
+
 @Data
 @RestController
 @RequestMapping("/requests")
@@ -18,7 +20,7 @@ public class ItemRequestController {
     private final ItemRequestClient requestClient;
 
     @PostMapping
-    public ResponseEntity<Object> createItemRequest(@RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long userId,
+    public ResponseEntity<Object> createItemRequest(@RequestHeader(X_SHARER_USER_ID) @Positive @NotNull Long userId,
                                                     @RequestBody @Valid BlankItemRequestDto requestDto) {
         log.info("Отправлен запрос на вещь: {} от пользователя с id {}", requestDto, userId);
         return requestClient.createItemRequest(userId, requestDto);
@@ -26,7 +28,7 @@ public class ItemRequestController {
 
 
     @GetMapping
-    public ResponseEntity<Object> getAllUserRequests(@RequestHeader("X-Sharer-User-Id")
+    public ResponseEntity<Object> getAllUserRequests(@RequestHeader(X_SHARER_USER_ID)
                                                      @Positive @NotNull Long requestorId) {
         log.info("Выведен список запросов пользователя с id {}", requestorId);
         return requestClient.getAllUserRequests(requestorId);
@@ -39,7 +41,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> getItemRequestById(@RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long userId,
+    public ResponseEntity<Object> getItemRequestById(@RequestHeader(X_SHARER_USER_ID) @Positive @NotNull Long userId,
                                                      @PathVariable("requestId") @Positive @NotNull Long requestId) {
         log.info("Выведен запрос с id {} для пользователя с id {}", requestId, userId);
         return requestClient.getItemRequestById(userId, requestId);

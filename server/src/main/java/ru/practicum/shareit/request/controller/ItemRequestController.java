@@ -10,6 +10,8 @@ import ru.practicum.shareit.request.service.ItemRequestService;
 
 import java.util.List;
 
+import static ru.practicum.shareit.constant.UserHeaderConstant.X_SHARER_USER_ID;
+
 
 @RestController
 @RequestMapping("/requests")
@@ -19,14 +21,14 @@ public class ItemRequestController {
     private final ItemRequestService requestService;
 
     @PostMapping
-    public ResponseEntity<ItemRequestDto> createItemRequest(@RequestHeader("X-Sharer-User-Id")
+    public ResponseEntity<ItemRequestDto> createItemRequest(@RequestHeader(X_SHARER_USER_ID)
                                                             Long requestorId,
                                                             @RequestBody BlankItemRequestDto requestDto) {
         return new ResponseEntity<>(requestService.createItemRequest(requestorId, requestDto), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemRequestDto>> getAllUserRequests(@RequestHeader("X-Sharer-User-Id")
+    public ResponseEntity<List<ItemRequestDto>> getAllUserRequests(@RequestHeader(X_SHARER_USER_ID)
                                                                    Long requestorId) {
         return new ResponseEntity<>(requestService.getAllUserRequests(requestorId), HttpStatus.OK);
 
@@ -38,7 +40,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<ItemRequestDto> getItemRequestById(@RequestHeader("X-Sharer-User-Id")
+    public ResponseEntity<ItemRequestDto> getItemRequestById(@RequestHeader(X_SHARER_USER_ID)
                                                              Long userId,
                                                              @PathVariable("requestId") long requestId) {
         return new ResponseEntity<>(requestService.getItemRequestById(userId, requestId), HttpStatus.OK);

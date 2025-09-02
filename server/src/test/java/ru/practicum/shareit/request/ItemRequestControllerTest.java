@@ -23,11 +23,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.constant.UserHeaderConstant.X_SHARER_USER_ID;
 
 @WebMvcTest(ItemRequestController.class)
 class ItemRequestControllerTest {
 
-    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
     private static final Long TEST_USER_ID = 1L;
     private static final Long TEST_REQUEST_ID = 1L;
     @Autowired
@@ -54,7 +54,7 @@ class ItemRequestControllerTest {
                 .thenReturn(responseDto);
 
         mockMvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, TEST_USER_ID)
+                        .header(X_SHARER_USER_ID, TEST_USER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createDto)))
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ class ItemRequestControllerTest {
         createDto.setDescription("");
 
         mockMvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, TEST_USER_ID)
+                        .header(X_SHARER_USER_ID, TEST_USER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createDto)))
                 .andExpect(status().isOk());
@@ -85,7 +85,7 @@ class ItemRequestControllerTest {
         createDto.setDescription("a".repeat(513)); // больше 512 символов
 
         mockMvc.perform(post("/requests")
-                        .header(USER_ID_HEADER, TEST_USER_ID)
+                        .header(X_SHARER_USER_ID, TEST_USER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createDto)))
                 .andExpect(status().isOk());
@@ -114,7 +114,7 @@ class ItemRequestControllerTest {
                 .thenReturn(List.of(requestDto1, requestDto2));
 
         mockMvc.perform(get("/requests")
-                        .header(USER_ID_HEADER, TEST_USER_ID))
+                        .header(X_SHARER_USER_ID, TEST_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -143,7 +143,7 @@ class ItemRequestControllerTest {
                 .thenReturn(List.of(requestDto));
 
         mockMvc.perform(get("/requests/all")
-                        .header(USER_ID_HEADER, TEST_USER_ID))
+                        .header(X_SHARER_USER_ID, TEST_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1))
@@ -168,7 +168,7 @@ class ItemRequestControllerTest {
         when(itemRequestService.getItemRequestById(TEST_USER_ID, TEST_REQUEST_ID))
                 .thenReturn(requestDto);
         mockMvc.perform(get("/requests/{requestId}", TEST_REQUEST_ID)
-                        .header(USER_ID_HEADER, TEST_USER_ID))
+                        .header(X_SHARER_USER_ID, TEST_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(TEST_REQUEST_ID))
                 .andExpect(jsonPath("$.description").value("Нужна дрель"))

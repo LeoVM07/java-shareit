@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.constant.UserHeaderConstant.X_SHARER_USER_ID;
 
 @WebMvcTest(ItemController.class)
 class ItemControllerTest {
@@ -91,7 +92,7 @@ class ItemControllerTest {
         when(itemService.createItem(eq(1L), any(ItemDto.class))).thenReturn(itemDto);
 
         mockMvc.perform(post("/items")
-                        .header("X-Sharer-User-Id", "1")
+                        .header(X_SHARER_USER_ID, "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemDto)))
                 .andExpect(status().isOk())
@@ -128,7 +129,7 @@ class ItemControllerTest {
                 .thenReturn(updatedItemDto);
 
         mockMvc.perform(patch("/items/1")
-                        .header("X-Sharer-User-Id", "1")
+                        .header(X_SHARER_USER_ID, "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemUpdateDto)))
                 .andExpect(status().isOk())
@@ -147,7 +148,7 @@ class ItemControllerTest {
                 .thenThrow(new ItemIdException(1L));
 
         mockMvc.perform(patch("/items/1")
-                        .header("X-Sharer-User-Id", "1")
+                        .header(X_SHARER_USER_ID, "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemUpdateDto)))
                 .andExpect(status().isNotFound());
@@ -162,7 +163,7 @@ class ItemControllerTest {
                 .thenThrow(new ItemIdException(1L));
 
         mockMvc.perform(patch("/items/1")
-                        .header("X-Sharer-User-Id", "2")
+                        .header(X_SHARER_USER_ID, "2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemUpdateDto)))
                 .andExpect(status().isNotFound());
@@ -203,7 +204,7 @@ class ItemControllerTest {
         when(itemService.getAllItemsByUserId(1L)).thenReturn(items);
 
         mockMvc.perform(get("/items")
-                        .header("X-Sharer-User-Id", "1"))
+                        .header(X_SHARER_USER_ID, "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1)))
@@ -218,7 +219,7 @@ class ItemControllerTest {
         when(itemService.getAllItemsByUserId(1L)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/items")
-                        .header("X-Sharer-User-Id", "1"))
+                        .header(X_SHARER_USER_ID, "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
@@ -291,7 +292,7 @@ class ItemControllerTest {
     void updateItem_ShouldReturnBadRequest_WhenInvalidItemId() throws Exception {
 
         mockMvc.perform(patch("/items/invalid")
-                        .header("X-Sharer-User-Id", "1")
+                        .header(X_SHARER_USER_ID, "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemUpdateDto)))
                 .andExpect(status().isBadRequest());
@@ -312,7 +313,7 @@ class ItemControllerTest {
     void addComment_ShouldReturnBadRequest_WhenInvalidItemId() throws Exception {
 
         mockMvc.perform(post("/items/invalid/comment")
-                        .header("X-Sharer-User-Id", "1")
+                        .header(X_SHARER_USER_ID, "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(commentDto)))
                 .andExpect(status().isBadRequest());

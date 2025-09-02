@@ -11,6 +11,8 @@ import ru.practicum.shareit.item.dto.CommentCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 
+import static ru.practicum.shareit.constant.UserHeaderConstant.X_SHARER_USER_ID;
+
 @Slf4j
 @Data
 @RestController
@@ -20,7 +22,7 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Object> createItem(@Positive @NotNull @RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public ResponseEntity<Object> createItem(@Positive @NotNull @RequestHeader(X_SHARER_USER_ID) Long ownerId,
                                              @RequestBody @Valid ItemDto itemDto) {
         log.info("Добавление вещи {} от пользователя с id: {}", itemDto, ownerId);
         return itemClient.createItem(ownerId, itemDto);
@@ -34,14 +36,14 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<Object> getAllItemsByUserId(
-            @Positive @NotNull @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+            @Positive @NotNull @RequestHeader(X_SHARER_USER_ID) Long ownerId) {
         log.info("Вывод всех вещей пользователя с id: {}", ownerId);
         return itemClient.getAllItemsByUserId(ownerId);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(@Positive @NotNull @PathVariable("itemId") Long itemId,
-                                             @Positive @NotNull @RequestHeader("X-Sharer-User-Id") Long ownerId,
+                                             @Positive @NotNull @RequestHeader(X_SHARER_USER_ID) Long ownerId,
                                              @RequestBody @Valid ItemUpdateDto itemUpdate) {
         return itemClient.updateItem(itemId, ownerId, itemUpdate);
     }
@@ -52,7 +54,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> createComment(@Positive @NotNull @RequestHeader("X-Sharer-User-Id") Long authorId,
+    public ResponseEntity<Object> createComment(@Positive @NotNull @RequestHeader(X_SHARER_USER_ID) Long authorId,
                                                 @Positive @NotNull @PathVariable("itemId") long itemId,
                                                 @RequestBody @Valid CommentCreateDto comment) {
         return itemClient.createComment(authorId, itemId, comment);
